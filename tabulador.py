@@ -26,7 +26,7 @@ distancia = st.number_input(
     value=1,
     step=1
 )
-st.write(f"Distancia ida y vuelta (km): {distancia}")
+st.write(f"Distancia ida y vuelta (km): {distancia}km.")
 
 lleva_equipo = st.selectbox("¿Ambrosía lleva equipo?:", decision)
 st.write(f"Ambrosía {lleva_equipo} lleva equipo.")
