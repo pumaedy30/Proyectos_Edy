@@ -202,7 +202,7 @@ def total_viaticos(hay_pernocta, personal, noches, invitados, distancia, autobus
 
     return sobrecosto_for, transporte, carga, gasolina, casetas, hospedaje, alimentos, subt_logistica, buffer, total_viatico, costoxinvitado
 
-# Obteniendo los disitntos gastos dados los datos introducidos por el usuario
+# Obteniendo los distintos gastos dados los datos introducidos por el usuario
 sobrecosto_foraneo, transporte, camion, gasolina, casetas, hospedaje, alimentos,  subt_logistica, buffer, total_viatico, costoxinvitado = total_viaticos(hay_pernocta, personal, noches, invitados, distancia, autobuses, camionetas, camion_carga, tarifas)
 
 # Mostrando los resultados obtenidos
