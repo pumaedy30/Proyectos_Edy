@@ -144,7 +144,7 @@ autobuses, camionetas = transporte_personal(personal, tarifas)
 # Calculando número de camiones de carga
 def camion_carga(lleva_equipo, invitados, tarifas):
     if lleva_equipo == "Si":
-        return max(1, invitados / tarifas["operacion"]["minimo_invitados_camion_carga"])
+        return max(1, math.ceil(invitados / tarifas["operacion"]["minimo_invitados_camion_carga"]))
     return 0
 camion_carga = camion_carga(lleva_equipo, invitados, tarifas)
 
