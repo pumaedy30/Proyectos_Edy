@@ -43,7 +43,7 @@ else:
     noches = 0
     st.write("No hay pernocta.")
 
-
+# Diccionario para almacenar los datos del personal de servicio
 personal_por_rango = [
     {
         "max_invitados": 50,
@@ -77,8 +77,7 @@ personal_por_rango = [
     },
 ]
 
-
-
+# Diccionario para almacenar tarifas y costos de operaciones
 tarifas = {
     "transporte": {
         "autobus": {
@@ -102,7 +101,6 @@ tarifas = {
         }
     },
 
-    
 
     "hospedaje": {
         "por_cuarto": 1800,
@@ -129,11 +127,11 @@ def total_personal(invitados):
     return 0
 personal = total_personal(invitados)
 
-# Calculando el sobrecosoto froáneo
+# Calculando el sobrecosoto foráneo
 def sobrecoto_foraneo(personal, tarifas):
     return personal * tarifas["operacion"]["sobrecosto_foraneo_staff"]
 
-# Calculando el transporte
+# Calculando el número de autobuses/camionetas
 def transporte_personal(personal, tarifas):
     autobuses = personal // tarifas["transporte"]["autobus"]["capacidad"]
     restantes = personal % tarifas["transporte"]["autobus"]["capacidad"]
@@ -143,27 +141,30 @@ def transporte_personal(personal, tarifas):
     return autobuses, camionetas
 autobuses, camionetas = transporte_personal(personal, tarifas)
 
-# Calculando número de camiones
+# Calculando número de camiones de carga
 def camion_carga(lleva_equipo, invitados, tarifas):
     if lleva_equipo == "Si":
         return max(1, invitados // tarifas["operacion"]["minimo_invitados_camion_carga"])
     return 0
 camion_carga = camion_carga(lleva_equipo, invitados, tarifas)
 
-
+# Calculando el costo de renta del transporte del personal
 def costo_transporte_personal(autobuses, camionetas, tarifas):
     return (
         autobuses * tarifas["transporte"]["autobus"]["renta"]
         + camionetas * tarifas["transporte"]["camioneta"]["renta"]
     )
 
+# Calculando el costo de renta de los camiones de carga
 def costo_camiones_carga(camion_carga, tarifas):
     return camion_carga * tarifas["transporte"]["camion_carga"]["renta"]
 
+# Calculando el costo de la gasolina del camión de carga
 def costo_gasolina(camion_carga, distancia, tarifas):
     litros = distancia / tarifas["transporte"]["camion_carga"]["combustible"]["rendimiento_km_litro"]
     return camion_carga * litros * tarifas["transporte"]["camion_carga"]["combustible"]["diesel_litro"] * (1 + tarifas["transporte"]["camion_carga"]["combustible"]["sobrecosto"])
 
+# Calculando el costo de las casetas por el equipo contratado
 def costo_casetas(autobuses, camionetas, camion_carga, tarifas):
     return (
         autobuses * tarifas["transporte"]["autobus"]["caseta"]
@@ -171,16 +172,19 @@ def costo_casetas(autobuses, camionetas, camion_carga, tarifas):
         + camion_carga * tarifas["transporte"]["camion_carga"]["caseta"]
     )
 
+# Calculando el costo de hospedaje en caso de haber pernocta
 def costo_hospedaje(hay_pernocta, personal, noches, tarifas):
     if hay_pernocta == 'Si':
         return personal // tarifas["hospedaje"]["ocupacion_por_cuarto"]  * tarifas["hospedaje"]["por_cuarto"] * noches
     return 0
-    
+
+# Calculando el costo de los alimentos en caso de haber pernocta 
 def costo_alimentos(hay_pernocta, personal, noches, tarifas):
     if hay_pernocta == 'Si':
         return personal * tarifas["operacion"]["alimentos_por_persona_dia"] * (noches + 1)
     return 0
 
+# Función global para hacer el cálculo total de los viáticos
 def total_viaticos(hay_pernocta, personal, noches, invitados, distancia, autobuses, camionetas, camion_carga, tarifas):
 
     sobrecosto_for = sobrecoto_foraneo(personal, tarifas)
@@ -193,16 +197,15 @@ def total_viaticos(hay_pernocta, personal, noches, invitados, distancia, autobus
     subt_logistica = sobrecosto_for + transporte + carga + gasolina + casetas + alimentos + hospedaje
 
     buffer = subt_logistica * tarifas["operacion"]["buffer_imprevistos"]
-
     total_viatico = subt_logistica + buffer
-
     costoxinvitado = total_viatico / invitados
 
     return sobrecosto_for, transporte, carga, gasolina, casetas, hospedaje, alimentos, subt_logistica, buffer, total_viatico, costoxinvitado
 
+# Obteniendo los disitntos gastos dados los datos introducidos por el usuario
 sobrecosto_foraneo, transporte, camion, gasolina, casetas, hospedaje, alimentos,  subt_logistica, buffer, total_viatico, costoxinvitado = total_viaticos(hay_pernocta, personal, noches, invitados, distancia, autobuses, camionetas, camion_carga, tarifas)
 
-
+# Mostrando los resultados obtenidos
 st.title("Desglose de Resultados")
 st.write(f"Sobrecosoto foráneo: ${sobrecosto_foraneo:,.2f}")
 st.write(f"Tranporte de personal: ${transporte:,.2f}")
@@ -215,3 +218,4 @@ st.write(f"Subtotal de logística: ${subt_logistica:,.2f}")
 st.write(f"Buffer de imprevistos: ${buffer:,.2f}")
 st.write(f"TOTAL DEL VIÁTICO: ${total_viatico:,.2f}")
 st.write(f"Costo por invitado: ${costoxinvitado:,.2f}")
+
