@@ -207,7 +207,7 @@ sobrecosto_foraneo, transporte, camion, gasolina, casetas, hospedaje, alimentos,
 
 # Mostrando los resultados obtenidos
 st.title("Desglose de Resultados")
-st.write(f"Sobrecosoto foráneo: ${sobrecosto_foraneo:,.2f}")
+st.write(f"Sobrecosto foráneo: ${sobrecosto_foraneo:,.2f}")
 st.write(f"Tranporte de personal: ${transporte:,.2f}")
 st.write(f"Camión de carga: ${camion:,.2f}")
 st.write(f"Gasolina: ${gasolina:,.2f}")
